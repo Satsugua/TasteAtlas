@@ -1,0 +1,2 @@
+# TasteAtlas
+For learning purposes
