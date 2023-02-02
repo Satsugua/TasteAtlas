@@ -2,17 +2,12 @@ package com.example.tasteatlas.feature_favorites.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-
-
 @Entity
 data class Entity(
     @PrimaryKey val id: Int? = null,
-    val EntityId2: Int? = null,
-    val EntityType: Int,
+    val entryType: String?,
     val Name: String,
-    val TypeOverride: String,
-    val UrlLink: String,
-    val Description: String,
-    val timestamp: Long
-) {
-}
+    val timestamp: Long? = null,
+    val imageUrl: String? = null
+)
+class InvalidFavException(msg: String): Exception(msg)

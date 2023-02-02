@@ -1,6 +1,5 @@
 package com.example.tasteatlas.feature_search.presentation.search
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +8,7 @@ import com.example.tasteatlas.feature_search.domain.repository.ListItemRepositor
 import com.example.tasteatlas.feature_search.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +21,7 @@ class SearchViewModel @Inject constructor(
     var isLoading = mutableStateOf(false)
 
     init {
-        Log.d("TAG", "SUKURTA")
+        Timber.tag("TAG").d("CREATED search screen")
         loadAuthentication()
     }
 
@@ -32,10 +32,10 @@ class SearchViewModel @Inject constructor(
             when (result) {
                 is Resource.Success -> {
                     Constants.tokenas += result.data!!.access_token
-                    Log.d("TAG", "FINISHED LOADING, tokenas: " + Constants.tokenas)
+                    Timber.tag("TAG").d("FINISHED LOADING TOKEN: %s", Constants.tokenas)
                 }
                 is Resource.Error -> {
-                    Log.d("TAG", "ERROR LOADING")
+                    Timber.tag("TAG").d("ERROR LOADING SEARCH LIST")
                     loadError.value = result.message.toString()
                 }
             }

@@ -1,11 +1,7 @@
 package com.example.tasteatlas.feature_search.presentation.search
 
-import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -14,20 +10,13 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -40,14 +29,11 @@ import com.example.tasteatlas.feature_search.presentation.components.DrawerBody
 import com.example.tasteatlas.feature_search.presentation.components.DrawerHeader
 import com.example.tasteatlas.feature_search.presentation.components.MenuItem
 import kotlinx.coroutines.launch
-
-
 @Composable
 fun SearchScreen(
     navController: NavController,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
-
     var text = ""
 
     val focusManager = LocalFocusManager.current
@@ -90,6 +76,7 @@ fun SearchScreen(
             )
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+        drawerBackgroundColor = MaterialTheme.colors.onSurface,
         drawerContent = {
             DrawerHeader()
             DrawerBody(
@@ -114,9 +101,7 @@ fun SearchScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
-
         ) {
-
             SearchBar(
                 modifier = Modifier,
                 hint = "Search...",
@@ -138,7 +123,6 @@ fun SearchScreen(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,

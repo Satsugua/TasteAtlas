@@ -81,6 +81,7 @@ fun DishScreen(
                     ) {
                         if (checked) {
                             Icon(Icons.Filled.Favorite, contentDescription = "it is favorite", tint = Color.Red, modifier = Modifier.size(48.dp))
+                            viewModel.addToFav(entityId, entityName, "")
                         } else {
                             Icon(Icons.Outlined.Favorite, contentDescription = "it is not favorite", modifier = Modifier.size(48.dp))
                         }
@@ -93,7 +94,6 @@ fun DishScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-//                    .padding(8.dp)
             ) {
                 Tabs(viewModel)
                 Spacer(modifier = Modifier.height(8.dp))

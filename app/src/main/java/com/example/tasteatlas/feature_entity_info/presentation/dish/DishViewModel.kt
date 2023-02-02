@@ -1,6 +1,7 @@
 package com.example.tasteatlas.feature_entity_info.presentation.dish
 
 import android.util.Log
+import androidx.compose.material.Snackbar
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -11,14 +12,19 @@ import com.example.tasteatlas.feature_entity_info.presentation.dish.model.where_
 import com.example.tasteatlas.feature_entity_info.presentation.dish.model.where_to_eat.DishRestaurants
 import com.example.tasteatlas.feature_entity_info.presentation.dish.model.where_to_eat.WhereToEat
 import com.example.tasteatlas.feature_entity_info.presentation.dish.model.where_to_eat.WhereToEatEntry
+import com.example.tasteatlas.feature_favorites.domain.model.Entity
+import com.example.tasteatlas.feature_favorites.domain.model.InvalidFavException
+import com.example.tasteatlas.feature_favorites.domain.use_case.FavUseCases
 import com.example.tasteatlas.feature_search.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class DishViewModel @Inject constructor(
     private val repository: ItemCommentsRepository,
+    private val favUseCases: FavUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -95,8 +101,21 @@ class DishViewModel @Inject constructor(
             isLoading.value = false
         }
     }
-
-    fun addToFav() {
-
+    fun addToFav(id: Int?, name: String, imageUrl: String?) {
+        viewModelScope.launch {
+            try {
+                favUseCases.addFav(
+                    Entity(
+                        id = id,
+                        Name = name,
+                        timestamp = System.currentTimeMillis(),
+                        imageUrl = imageUrl,
+                        entryType = null
+                    )
+                )
+            } catch (e: InvalidFavException) {
+                Timber.tag("TAG").d("ERROR ADDING TO FAVS %s", e)
+            }
+        }
     }
 }
