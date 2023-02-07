@@ -40,12 +40,7 @@ fun SearchListScreen(
                 )
             }
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
                 SearchItemList(navController = navController)
-            }
         }
 }
 @Composable
@@ -58,7 +53,6 @@ fun SearchItemList(
 
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
         val itemCount = searchList.size
-        Timber.tag("TAG").d("listsize: %s", searchList.size)
         items(itemCount) {
             SearchItemEntry(entry = searchList[it], navController = navController)
         }

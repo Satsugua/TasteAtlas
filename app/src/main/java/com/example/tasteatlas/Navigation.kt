@@ -11,7 +11,6 @@ import com.example.tasteatlas.feature_entity_info.presentation.dish.DishScreen
 import com.example.tasteatlas.feature_favorites.presentation.fav_list.FavListScreen
 import com.example.tasteatlas.feature_search.presentation.search.SearchScreen
 import com.example.tasteatlas.feature_search.presentation.search_list.SearchListScreen
-
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
@@ -25,32 +24,22 @@ fun Navigation() {
         composable(
             route = Screen.SearchListScreen.route + "?entryName={entryName}",
             arguments = listOf (
-                navArgument(
-                name = "entryName"
-            ){
-//                type = NavType.StringType
+                navArgument("entryName"){
                 defaultValue = "kebab"
             })) {
             SearchListScreen(navController = navController)
         }
         composable(
-            "dish_screen/{entityName}/{entityId}",
+            "dish_screen/{entityString}",
              arguments = listOf(
-                 navArgument("entityName"){},
-                 navArgument("entityId"){
-                     type = NavType.IntType
-                 }
+                 navArgument("entityString"){}
              )
         ) {
-            val entityName = remember {
-                it.arguments?.getString("entityName")
-            }
-            val entityId = remember {
-                it.arguments?.getInt("entityId")
+            val entity = remember {
+                it.arguments?.getString("entityString")
             }
             DishScreen(
-                entityName = entityName ?: "EntityName",
-                entityId = entityId ?: 0,
+                entityString = entity ?: "",
                 navController = navController
             )
         }

@@ -19,17 +19,14 @@ class SearchListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-
     var searchList = mutableStateOf<List<Entity>>(listOf())
     var loadError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
-
     init {
         Timber.tag("TAG").d("STARTED search")
         val argument = savedStateHandle.get<String>("entryName").orEmpty()
         loadSearchList(argument)
     }
-
     fun loadSearchList(argument: String) {
         viewModelScope.launch {
             isLoading.value = true

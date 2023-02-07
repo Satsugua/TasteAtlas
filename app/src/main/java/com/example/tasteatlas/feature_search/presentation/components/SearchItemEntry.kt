@@ -26,6 +26,8 @@ import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.tasteatlas.Constants
+import com.example.tasteatlas.Screen
+import com.example.tasteatlas.dataToJson
 import com.example.tasteatlas.feature_favorites.domain.model.Entity
 import com.example.tasteatlas.feature_search.domain.model.SearchListEntry
 import com.example.tasteatlas.ui.theme.Roboto
@@ -44,7 +46,7 @@ fun SearchItemEntry(
             .background(MaterialTheme.colors.onBackground)
             .clickable {
                 navController.navigate(
-                    "dish_screen/${entry.Name}/${entry.id}"
+                    "dish_screen/${dataToJson(entry)}"
                 )
             }
     ) {

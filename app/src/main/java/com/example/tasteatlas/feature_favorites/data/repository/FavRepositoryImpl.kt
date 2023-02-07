@@ -12,12 +12,14 @@ class FavRepositoryImpl(
     override fun getFavs(): Flow<List<Entity>> {
         return dao.getFavs()
     }
-
     override suspend fun insertFav(entity: Entity) {
         return dao.insertFav(entity)
     }
-
     override suspend fun deleteFav(entity: Entity) {
         return dao.deleteFav(entity)
+    }
+
+    override suspend fun checkIfFav(id: Int): Boolean {
+        return dao.checkIfFav(id)
     }
 }

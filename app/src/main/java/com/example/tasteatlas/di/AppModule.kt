@@ -9,10 +9,7 @@ import com.example.tasteatlas.feature_entity_info.domain.repository.ItemComments
 import com.example.tasteatlas.feature_favorites.data.data_source.FavDatabase
 import com.example.tasteatlas.feature_favorites.data.repository.FavRepositoryImpl
 import com.example.tasteatlas.feature_favorites.domain.repository.FavRepository
-import com.example.tasteatlas.feature_favorites.domain.use_case.AddFav
-import com.example.tasteatlas.feature_favorites.domain.use_case.DeleteFav
-import com.example.tasteatlas.feature_favorites.domain.use_case.FavUseCases
-import com.example.tasteatlas.feature_favorites.domain.use_case.GetFavs
+import com.example.tasteatlas.feature_favorites.domain.use_case.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -66,7 +63,8 @@ object AppModule {
         return FavUseCases(
             getFavs = GetFavs(repository),
             deleteFav = DeleteFav(repository),
-            addFav = AddFav(repository)
+            addFav = AddFav(repository),
+            checkIfFav = CheckIfFav(repository)
         )
     }
 }

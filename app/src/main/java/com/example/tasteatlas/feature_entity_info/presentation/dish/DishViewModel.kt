@@ -2,6 +2,7 @@ package com.example.tasteatlas.feature_entity_info.presentation.dish
 
 import android.util.Log
 import androidx.compose.material.Snackbar
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -15,9 +16,14 @@ import com.example.tasteatlas.feature_entity_info.presentation.dish.model.where_
 import com.example.tasteatlas.feature_favorites.domain.model.Entity
 import com.example.tasteatlas.feature_favorites.domain.model.InvalidFavException
 import com.example.tasteatlas.feature_favorites.domain.use_case.FavUseCases
+import com.example.tasteatlas.feature_favorites.domain.util.FavOrder
 import com.example.tasteatlas.feature_search.util.Resource
+import com.example.tasteatlas.jsonToData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,17 +39,20 @@ class DishViewModel @Inject constructor(
     var whereToEatList = mutableStateOf<List<WhereToEatEntry>>(listOf())
     var loadError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
-    val dishId = savedStateHandle.get<Int>("entityId") ?: -1
-
+    var isLoadingFav = mutableStateOf(false)
+    val entity: Entity = jsonToData(savedStateHandle.get("entityString")!!, Entity::class.java) as Entity
+    var isFav = mutableStateOf(false)
     init {
+
         loadComments()
         loadWhereToEatPaginated()
+        isFavChecked()
     }
 
     fun loadComments() {
         viewModelScope.launch {
             isLoading.value = true
-            val result = repository.getCommentsList(dishId)
+            val result = repository.getCommentsList(entity.id!!)
             when(result) {
                 is Resource.Success -> {
                     commentList.value += result.data!!.Data.map{commentItem ->
@@ -63,7 +72,7 @@ class DishViewModel @Inject constructor(
     fun loadWhereToEatPaginated() {
         viewModelScope.launch {
             isLoading.value = true
-            val result = repository.getWhereToEat(dishId, curPage, curPage+5)
+            val result = repository.getWhereToEat(entity.id!!, curPage, curPage+5)
             when(result) {
                 is Resource.Success -> {
                     // TODO endreached/pagination
@@ -101,20 +110,37 @@ class DishViewModel @Inject constructor(
             isLoading.value = false
         }
     }
-    fun addToFav(id: Int?, name: String, imageUrl: String?) {
+
+    private fun isFavChecked(){
+        var temp: Boolean
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                temp = favUseCases.checkIfFav(entity.id!!)
+                withContext(Dispatchers.Main) {
+                    isFav.value = temp
+                }
+            } catch (e: Exception) {
+                Timber.tag("TAG").d("ERROR CHECKING IF FAV: %s", e)
+            }
+        }
+    }
+
+    fun addToFav() {
         viewModelScope.launch {
             try {
-                favUseCases.addFav(
-                    Entity(
-                        id = id,
-                        Name = name,
-                        timestamp = System.currentTimeMillis(),
-                        imageUrl = imageUrl,
-                        entryType = null
-                    )
-                )
+                favUseCases.addFav(entity)
             } catch (e: InvalidFavException) {
-                Timber.tag("TAG").d("ERROR ADDING TO FAVS %s", e)
+                Timber.tag("TAG").d("ERROR ADDING TO FAVS: %s", e)
+            }
+        }
+    }
+
+    fun removeFromFav() {
+        viewModelScope.launch {
+            try {
+                favUseCases.deleteFav(entity)
+            } catch (e: Exception) {
+                Timber.tag("TAG").d("ERROR REMOVING FAV: %s", e)
             }
         }
     }

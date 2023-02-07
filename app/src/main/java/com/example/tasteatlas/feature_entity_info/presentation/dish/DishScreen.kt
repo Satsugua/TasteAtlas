@@ -1,6 +1,5 @@
 package com.example.tasteatlas.feature_entity_info.presentation.dish
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -8,10 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -23,25 +19,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.example.tasteatlas.components.LoadingPopUp
 import com.example.tasteatlas.feature_entity_info.presentation.dish.components.ItemComments
 import com.example.tasteatlas.feature_entity_info.presentation.dish.components.ItemWhereToEat
+import com.example.tasteatlas.feature_favorites.domain.model.Entity
+import com.example.tasteatlas.jsonToData
 import com.example.tasteatlas.ui.theme.Roboto
-import dagger.hilt.android.lifecycle.HiltViewModel
+import timber.log.Timber
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun DishScreen(
-    entityName: String,
-    entityId: Int,
+    entityString: String,
     navController: NavController,
     viewModel: DishViewModel = hiltViewModel()
 ) {
 
-    var checked by remember { mutableStateOf(false) }
+    var checked by remember { viewModel.isFav }
+    val entity: Entity = jsonToData(entityString, Entity::class.java) as Entity
 
     Scaffold(
         topBar = {
@@ -51,11 +49,10 @@ fun DishScreen(
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .heightIn(max = 160.dp)
-
             )
             TopAppBar(
                 title = {
-                    Text(text = entityName)
+                    Text(text = entity.Name)
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -81,9 +78,10 @@ fun DishScreen(
                     ) {
                         if (checked) {
                             Icon(Icons.Filled.Favorite, contentDescription = "it is favorite", tint = Color.Red, modifier = Modifier.size(48.dp))
-                            viewModel.addToFav(entityId, entityName, "")
+                            viewModel.addToFav()
                         } else {
                             Icon(Icons.Outlined.Favorite, contentDescription = "it is not favorite", modifier = Modifier.size(48.dp))
+                            viewModel.removeFromFav()
                         }
                     }
                 }
