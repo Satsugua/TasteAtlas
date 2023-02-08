@@ -16,6 +16,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -32,6 +33,24 @@ class FavListViewModel @Inject constructor(
     init {
         Timber.tag("TAG").d("FAV SCREEN OPENING")
         getFavs(FavOrder.Date(OrderType.Descending))
+    }
+
+    fun onEvent(event: FavEvents) {
+        when(event) {
+            is FavEvents.Order -> {
+                if(state.value.favOrder::class == event.favOrder::class &&
+                    state.value.favOrder.orderType == event.favOrder.orderType
+                ) {
+                    return
+                }
+                getFavs(event.favOrder)
+            }
+            is FavEvents.ToggleOrder -> {
+                _state.value = state.value.copy(
+                    isOrderSectionVisible = !state.value.isOrderSectionVisible
+                )
+            }
+        }
     }
     private fun getFavs(favOrder: FavOrder) {
         getFavJob?.cancel()

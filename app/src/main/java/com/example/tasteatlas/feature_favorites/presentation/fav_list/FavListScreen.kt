@@ -1,5 +1,7 @@
 package com.example.tasteatlas.feature_favorites.presentation.fav_list
 
+import androidx.compose.animation.*
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,8 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.tasteatlas.feature_favorites.domain.model.Entity
-import com.example.tasteatlas.feature_search.domain.model.SearchListEntry
+import com.example.tasteatlas.feature_favorites.domain.components.Ordering
 import com.example.tasteatlas.feature_search.presentation.components.SearchItemEntry
 
 @Composable
@@ -25,8 +26,6 @@ fun FavListScreen(
     viewModel: FavListViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -45,7 +44,10 @@ fun FavListScreen(
                 contentColor = Color.White,
                 elevation = 10.dp,
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        viewModel.onEvent(FavEvents.ToggleOrder)
+                    }
+                    ) {
                         Icon(Icons.Outlined.FilterAlt, "filter button")
 
                     }
@@ -53,11 +55,29 @@ fun FavListScreen(
             )
         }
     ) {
-        LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-            items(state.favs) { fav ->
-                SearchItemEntry(entry = fav, navController = navController)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+
+
+            AnimatedVisibility(
+                visible = state.isOrderSectionVisible,
+                enter = fadeIn() + slideInVertically(),
+                exit = fadeOut() + slideOutVertically()
+            ) {
+                Ordering(onOrderChange = {
+                    viewModel.onEvent(FavEvents.Order(it))
+                })
+
+            }
+            LazyColumn(modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)) {
+                items(state.favs) { fav ->
+                    SearchItemEntry(entry = fav, navController = navController)
+                }
             }
         }
-
     }
 }
