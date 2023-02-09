@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
@@ -28,6 +29,7 @@ import com.example.tasteatlas.components.LoadingPopUp
 import com.example.tasteatlas.feature_search.presentation.components.DrawerBody
 import com.example.tasteatlas.feature_search.presentation.components.DrawerHeader
 import com.example.tasteatlas.feature_search.presentation.components.MenuItem
+import com.example.tasteatlas.feature_search.presentation.components.SearchItemEntry
 import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
@@ -39,9 +41,12 @@ fun SearchScreen(
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     val isLoading by remember { viewModel.isLoading }
+    val searchList by remember { viewModel.searchList }
 
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+
+
 
     if(isLoading) LoadingPopUp()
 
@@ -105,19 +110,15 @@ fun SearchScreen(
             SearchBar(
                 modifier = Modifier,
                 hint = "Search...",
-                onSearch = {text = it},
+                onSearch = {text = it
+                           viewModel.loadSearchList(text)},
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = {
-                    navController.navigate(
-                    Screen.SearchListScreen.route +
-                            "?entryName=${text}"
-                    )
+            LazyColumn() {
+                val itemCount = searchList.size
+                items(itemCount) {
+                    SearchItemEntry(entry = searchList[it], navController = navController)
                 }
-            ) {
-                Text(
-                    text = "Search"
-                )
             }
         }
     }

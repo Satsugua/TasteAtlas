@@ -10,7 +10,6 @@ import androidx.navigation.navArgument
 import com.example.tasteatlas.feature_entity_info.presentation.dish.DishScreen
 import com.example.tasteatlas.feature_favorites.presentation.fav_list.FavListScreen
 import com.example.tasteatlas.feature_search.presentation.search.SearchScreen
-import com.example.tasteatlas.feature_search.presentation.search_list.SearchListScreen
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
@@ -20,14 +19,6 @@ fun Navigation() {
     ){
         composable(route = Screen.SearchScreen.route) {
             SearchScreen(navController = navController)
-        }
-        composable(
-            route = Screen.SearchListScreen.route + "?entryName={entryName}",
-            arguments = listOf (
-                navArgument("entryName"){
-                defaultValue = "kebab"
-            })) {
-            SearchListScreen(navController = navController)
         }
         composable(
             "dish_screen/{entityString}",
