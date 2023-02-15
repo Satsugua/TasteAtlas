@@ -55,10 +55,10 @@ class SearchViewModel @Inject constructor(
             val result = repository.getSearchList(argument)
             when(result) {
                 is Resource.Success -> {
-                    searchList.value += result.data!!.CustomItems.mapIndexed { index, customItem ->
+                    searchList.value += result.data!!.CustomItems.map { customItem ->
                         Entity(customItem.EntityId, customItem.TypeOverride, customItem.Name, null, customItem.PreviewImage.Source)
                     }
-                    searchList.value += result.data.Items.mapIndexed { index, item ->
+                    searchList.value += result.data.Items.map { item ->
                         Entity(item.EntityId, item.TypeOverride, item.Name, null, item.PreviewImage.Source)
                     }
                     loadError.value = ""

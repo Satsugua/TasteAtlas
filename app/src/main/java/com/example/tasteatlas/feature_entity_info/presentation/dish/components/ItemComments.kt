@@ -22,8 +22,6 @@ import androidx.compose.ui.unit.sp
 import com.example.tasteatlas.feature_entity_info.presentation.dish.DishViewModel
 import com.example.tasteatlas.feature_entity_info.presentation.dish.model.comments.CommentEntry
 import com.example.tasteatlas.ui.theme.Roboto
-
-
 @Composable
 fun ItemComments(
     viewModel: DishViewModel
@@ -38,7 +36,6 @@ fun ItemComments(
     }
 
 }
-
 @Composable
 fun CommentListEntry(
     entry: CommentEntry
@@ -51,24 +48,20 @@ fun CommentListEntry(
             .background(MaterialTheme.colors.onBackground)
 
     ) {
-        Column(
-
-        ) {
-            Row(
-
-            ) {
+        Column {
+            Row {
                 Icon(
                     imageVector = Icons.Outlined.AccountCircle,
                     contentDescription = "LocationIcon",
                     modifier = Modifier.size(40.dp),
                     tint = MaterialTheme.colors.primary
                 )
-                Column() {
+                Column {
                     Text(
                         text = entry.commentFirstName,
                         style = MaterialTheme.typography.h1
                     )
-                    Row() {
+                    Row {
                         //TODO RATING
                         //TODO DATE
                     }
@@ -84,14 +77,7 @@ fun CommentListEntry(
                     style = MaterialTheme.typography.h2
                 )
             }
-
-            Box(
-
-            ) {
-
-            }
         }
-
     }
     Spacer(modifier = Modifier.height(16.dp))
 }

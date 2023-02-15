@@ -41,7 +41,7 @@ fun SearchScreen(
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     val isLoading by remember { viewModel.isLoading }
-    val searchList by remember { viewModel.searchList }
+    var searchList by remember { viewModel.searchList }
 
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -110,8 +110,11 @@ fun SearchScreen(
             SearchBar(
                 modifier = Modifier,
                 hint = "Search...",
-                onSearch = {text = it
-                           viewModel.loadSearchList(text)},
+                onSearch = {
+                    text = it
+                    if(text.length > 2) viewModel.loadSearchList(text)
+                           else searchList = emptyList()
+                           },
             )
             Spacer(modifier = Modifier.height(16.dp))
             LazyColumn() {

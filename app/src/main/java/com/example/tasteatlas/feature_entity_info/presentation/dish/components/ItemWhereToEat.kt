@@ -2,6 +2,7 @@ package com.example.tasteatlas.feature_entity_info.presentation.dish.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.tasteatlas.Constants
 import com.example.tasteatlas.feature_entity_info.presentation.dish.DishViewModel
-import com.example.tasteatlas.feature_entity_info.presentation.dish.model.where_to_eat.WhereToEat
 import com.example.tasteatlas.feature_entity_info.presentation.dish.model.where_to_eat.WhereToEatEntry
 
 @Composable
@@ -31,7 +32,7 @@ fun ItemWhereToEat(
         contentPadding = PaddingValues(8.dp)
     ) {
         items(whereToEatList.size) {
-            ItemWhereToEatEntry(entry = whereToEatList[it])
+            ItemWhereToEatEntry(entry = whereToEatList[it], viewModel)
         }
     }
 }
@@ -39,8 +40,10 @@ fun ItemWhereToEat(
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ItemWhereToEatEntry(
-    entry: WhereToEatEntry
+    entry: WhereToEatEntry,
+    viewModel: DishViewModel
 ) {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -48,6 +51,9 @@ fun ItemWhereToEatEntry(
             .shadow(5.dp, RoundedCornerShape(5.dp))
             .clip(RoundedCornerShape(5.dp))
             .background(MaterialTheme.colors.onBackground)
+            .clickable {
+                viewModel.openRestaurantMap(context = context, address = entry.Name + ", " + entry.Address)
+            }
     ) {
         Column(
             modifier = Modifier
@@ -69,6 +75,7 @@ fun ItemWhereToEatEntry(
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .heightIn(max = 160.dp)
+                    .fillMaxWidth()
             )
         }
     }

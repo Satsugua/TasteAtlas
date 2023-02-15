@@ -1,31 +1,26 @@
 package com.example.tasteatlas.feature_entity_info.presentation.dish
 
-import android.util.Log
-import androidx.compose.material.Snackbar
-import androidx.compose.material.rememberScaffoldState
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tasteatlas.feature_entity_info.domain.repository.ItemCommentsRepository
 import com.example.tasteatlas.feature_entity_info.presentation.dish.model.comments.CommentEntry
-import com.example.tasteatlas.feature_entity_info.presentation.dish.model.where_to_eat.Data
-import com.example.tasteatlas.feature_entity_info.presentation.dish.model.where_to_eat.DishRestaurants
-import com.example.tasteatlas.feature_entity_info.presentation.dish.model.where_to_eat.WhereToEat
 import com.example.tasteatlas.feature_entity_info.presentation.dish.model.where_to_eat.WhereToEatEntry
 import com.example.tasteatlas.feature_favorites.domain.model.Entity
 import com.example.tasteatlas.feature_favorites.domain.model.InvalidFavException
 import com.example.tasteatlas.feature_favorites.domain.use_case.FavUseCases
-import com.example.tasteatlas.feature_favorites.domain.util.FavOrder
 import com.example.tasteatlas.feature_search.util.Resource
 import com.example.tasteatlas.jsonToData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class DishViewModel @Inject constructor(
@@ -143,5 +138,13 @@ class DishViewModel @Inject constructor(
                 Timber.tag("TAG").d("ERROR REMOVING FAV: %s", e)
             }
         }
+    }
+
+    fun openRestaurantMap(context: Context, address: String) {
+
+        val linkas = Uri.parse("https://www.google.com/maps/search/?api=1&query=" + Uri.encode(address))
+        val intent = Intent(Intent.ACTION_VIEW, linkas)
+//        intent.setPackage("com.google.android.apps.maps")
+        startActivity(context, intent, null)
     }
 }

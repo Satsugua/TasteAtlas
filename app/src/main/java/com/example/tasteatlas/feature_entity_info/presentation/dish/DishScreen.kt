@@ -30,7 +30,6 @@ import com.example.tasteatlas.feature_favorites.domain.model.Entity
 import com.example.tasteatlas.jsonToData
 import com.example.tasteatlas.ui.theme.Roboto
 import timber.log.Timber
-
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun DishScreen(
@@ -72,7 +71,6 @@ fun DishScreen(
                         )
                     )
                     .requiredHeight(160.dp),
-
                 actions = {
                     IconToggleButton(
                         checked = checked,
@@ -90,27 +88,15 @@ fun DishScreen(
             )
         }, content = {
             Spacer(modifier = Modifier.height(16.dp))
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
                 Tabs(viewModel)
                 Spacer(modifier = Modifier.height(8.dp))
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(8.dp),
-                    verticalArrangement = Arrangement.SpaceBetween
-                ) {
-
-//                    ItemDescription()
-
-                }
-
             }
-
-        })
+        }
+    )
 }
 
 @Composable
