@@ -7,6 +7,5 @@ interface FavRepository {
     fun getFavs(): Flow<List<Entity>>
     suspend fun insertFav(entity: Entity)
     suspend fun deleteFav(entity: Entity)
-
     suspend fun checkIfFav(id: Int): Boolean
 }

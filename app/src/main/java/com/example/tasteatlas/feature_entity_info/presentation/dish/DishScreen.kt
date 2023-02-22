@@ -25,6 +25,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.tasteatlas.components.LoadingPopUp
 import com.example.tasteatlas.feature_entity_info.presentation.dish.components.ItemComments
+import com.example.tasteatlas.feature_entity_info.presentation.dish.components.ItemRecipe
 import com.example.tasteatlas.feature_entity_info.presentation.dish.components.ItemWhereToEat
 import com.example.tasteatlas.feature_favorites.domain.model.Entity
 import com.example.tasteatlas.jsonToData
@@ -126,7 +127,7 @@ fun Tabs(
         ) {
             when (tabIndex) {
                 0 -> ItemDescription()
-                1 -> ItemRecipe()
+                1 -> ItemRecipe(viewModel)
                 2 -> ItemWhereToEat(viewModel)
                 3 -> ItemComments(viewModel)
             }
@@ -148,21 +149,3 @@ fun ItemDescription(
         )
     )
 }
-
-@Composable
-fun ItemRecipe(
-
-) {
-    Text(
-        text = "recipes",
-        style = TextStyle(
-            fontSize = 15.sp,
-            fontFamily = Roboto,
-            fontWeight = FontWeight.Normal,
-            textAlign = TextAlign.Justify,
-            color = Color.Black
-        )
-    )
-}
-
-

@@ -28,13 +28,11 @@ class FavListViewModel @Inject constructor(
 
     private val _state = mutableStateOf(FavStates())
     val state: State<FavStates> = _state
-    private var recentlyDeleted: Entity? = null
     private var getFavJob: Job? = null
     init {
         Timber.tag("TAG").d("FAV SCREEN OPENING")
         getFavs(FavOrder.Date(OrderType.Descending))
     }
-
     fun onEvent(event: FavEvents) {
         when(event) {
             is FavEvents.Order -> {

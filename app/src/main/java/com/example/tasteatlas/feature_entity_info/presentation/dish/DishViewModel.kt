@@ -8,8 +8,10 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tasteatlas.feature_entity_info.domain.repository.ItemCommentsRepository
+import com.example.tasteatlas.feature_entity_info.domain.repository.ItemRepository
 import com.example.tasteatlas.feature_entity_info.presentation.dish.model.comments.CommentEntry
+import com.example.tasteatlas.feature_entity_info.presentation.dish.model.recipe.Recipe
+import com.example.tasteatlas.feature_entity_info.presentation.dish.model.where_to_eat.WhereToEat
 import com.example.tasteatlas.feature_entity_info.presentation.dish.model.where_to_eat.WhereToEatEntry
 import com.example.tasteatlas.feature_favorites.domain.model.Entity
 import com.example.tasteatlas.feature_favorites.domain.model.InvalidFavException
@@ -20,11 +22,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class DishViewModel @Inject constructor(
-    private val repository: ItemCommentsRepository,
+    private val repository: ItemRepository,
     private val favUseCases: FavUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -32,23 +33,23 @@ class DishViewModel @Inject constructor(
     private var curPage = 0
     var commentList = mutableStateOf<List<CommentEntry>>(listOf())
     var whereToEatList = mutableStateOf<List<WhereToEatEntry>>(listOf())
+    var recipeInfo: Recipe? = null
     var loadError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
     var isLoadingFav = mutableStateOf(false)
     val entity: Entity = jsonToData(savedStateHandle.get("entityString")!!, Entity::class.java) as Entity
     var isFav = mutableStateOf(false)
     init {
-
+        isFavChecked()
         loadComments()
         loadWhereToEatPaginated()
-        isFavChecked()
+        loadRecipe()
     }
 
     fun loadComments() {
         viewModelScope.launch {
             isLoading.value = true
-            val result = repository.getCommentsList(entity.id!!)
-            when(result) {
+            when(val result = repository.getCommentsList(entity.id!!)) {
                 is Resource.Success -> {
                     commentList.value += result.data!!.Data.map{commentItem ->
                         CommentEntry(commentItem.CommentId, commentItem.Content, commentItem.CreatedAt, commentItem.FirstName, commentItem.RatingScore, commentItem.ProfilePicture)
@@ -63,12 +64,10 @@ class DishViewModel @Inject constructor(
             }
         }
     }
-
     fun loadWhereToEatPaginated() {
         viewModelScope.launch {
             isLoading.value = true
-            val result = repository.getWhereToEat(entity.id!!, curPage, curPage+5)
-            when(result) {
+            when(val result = repository.getWhereToEat(entity.id!!, curPage, curPage+5)) {
                 is Resource.Success -> {
                     // TODO endreached/pagination
                     whereToEatList.value += result.data!!.DishRestaurants.Data.map { item ->
@@ -106,6 +105,23 @@ class DishViewModel @Inject constructor(
         }
     }
 
+    fun loadRecipe() {
+        viewModelScope.launch {
+            val result = repository.getRecipe(entity.id!!)
+
+            if (result.data.toString() != "null") {
+                Timber.tag("TAG").d(result.data.toString())
+                when(result) {
+                    is Resource.Success -> {
+                        recipeInfo = result.data!!
+                    }
+                    is Resource.Error -> {
+                        loadError.value = result.message!!
+                    }
+                }
+            }
+        }
+    }
     private fun isFavChecked(){
         var temp: Boolean
         CoroutineScope(Dispatchers.IO).launch {

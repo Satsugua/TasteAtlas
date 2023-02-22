@@ -49,7 +49,6 @@ fun FavListScreen(
                     }
                     ) {
                         Icon(Icons.Outlined.FilterAlt, "filter button")
-
                     }
                 }
             )
@@ -59,8 +58,6 @@ fun FavListScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-
-
             AnimatedVisibility(
                 visible = state.isOrderSectionVisible,
                 enter = fadeIn() + slideInVertically(),
@@ -69,7 +66,6 @@ fun FavListScreen(
                 Ordering(onOrderChange = {
                     viewModel.onEvent(FavEvents.Order(it))
                 })
-
             }
             LazyColumn(modifier = Modifier
                 .fillMaxSize()

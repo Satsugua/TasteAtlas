@@ -5,7 +5,7 @@ import androidx.room.Room
 import com.example.tasteatlas.network.TasteApi
 import com.example.tasteatlas.feature_search.domain.repository.ListItemRepository
 import com.example.tasteatlas.Constants.BASE_URL
-import com.example.tasteatlas.feature_entity_info.domain.repository.ItemCommentsRepository
+import com.example.tasteatlas.feature_entity_info.domain.repository.ItemRepository
 import com.example.tasteatlas.feature_favorites.data.data_source.FavDatabase
 import com.example.tasteatlas.feature_favorites.data.repository.FavRepositoryImpl
 import com.example.tasteatlas.feature_favorites.domain.repository.FavRepository
@@ -30,7 +30,7 @@ object AppModule {
     @Provides
     fun provideCommentsRepository(
         api: TasteApi
-    ) = ItemCommentsRepository(api)
+    ) = ItemRepository(api)
     @Singleton
     @Provides
     fun provideTateApi(): TasteApi {
@@ -40,7 +40,6 @@ object AppModule {
             .build()
             .create(TasteApi::class.java)
     }
-
     @Singleton
     @Provides
     fun provideFavDatabase(app: Application): FavDatabase {
@@ -50,13 +49,11 @@ object AppModule {
             FavDatabase.DATABASE_NAME
         ).build()
     }
-
     @Singleton
     @Provides
     fun provideFavRepository(db: FavDatabase): FavRepository {
         return FavRepositoryImpl(db.favDao)
     }
-
     @Singleton
     @Provides
     fun provideFavUseCases(repository: FavRepository): FavUseCases {

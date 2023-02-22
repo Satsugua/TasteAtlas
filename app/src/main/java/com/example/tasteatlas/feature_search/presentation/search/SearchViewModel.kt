@@ -25,7 +25,6 @@ class SearchViewModel @Inject constructor(
     var isLoading = mutableStateOf(false)
     var searchList = mutableStateOf<List<Entity>>(listOf())
     var job: Job? = null
-
     init {
         Timber.tag("TAG").d("CREATED search screen")
         loadAuthentication()
@@ -47,7 +46,6 @@ class SearchViewModel @Inject constructor(
             isLoading.value = false
         }
     }
-
     fun loadSearchList(argument: String) {
         job?.cancel()
         searchList.value = emptyList()

@@ -16,7 +16,7 @@ import com.example.tasteatlas.ui.theme.Independence
 fun LoadingPopUp(
 
 ) {
-    Dialog(onDismissRequest = { /*TODO*/ }) {
+    Dialog(onDismissRequest = {  }) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.Center,

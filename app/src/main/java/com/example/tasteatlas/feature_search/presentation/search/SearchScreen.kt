@@ -46,8 +46,6 @@ fun SearchScreen(
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
-
-
     if(isLoading) LoadingPopUp()
 
     Scaffold(
@@ -126,7 +124,6 @@ fun SearchScreen(
         }
     }
 }
-
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,

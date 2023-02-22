@@ -17,7 +17,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 @Composable
 fun DrawerHeader(
 
@@ -31,7 +30,6 @@ fun DrawerHeader(
         Text(text = "Hello", style = TextStyle(fontSize = 24.sp, color = MaterialTheme.colors.primary))
     }
 }
-
 @Composable
 fun DrawerBody(
     items: List<MenuItem>,
@@ -67,5 +65,4 @@ fun DrawerBody(
             }
         }
     }
-
 }

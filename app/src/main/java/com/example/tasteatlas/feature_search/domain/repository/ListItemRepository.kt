@@ -16,11 +16,10 @@ class ListItemRepository @Inject constructor(
         val response = try {
             api.getListResult(argument)
         } catch (e: Exception) {
-            return Resource.Error("An unknown error.")
+            return Resource.Error("getSearchList ERROR: $e")
         }
         return Resource.Success(response)
     }
-
     suspend fun authentication() : Resource<TokenInfo> {
         val response = try {
             api.getToken()
