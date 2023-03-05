@@ -12,11 +12,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,19 +32,21 @@ import com.example.tasteatlas.dataToJson
 import com.example.tasteatlas.feature_favorites.domain.model.Entity
 import com.example.tasteatlas.ui.theme.Roboto
 
-@OptIn(ExperimentalCoilApi::class)
+@OptIn(ExperimentalCoilApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SearchItemEntry(
     entry: Entity,
     navController: NavController,
     modifier: Modifier = Modifier,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     Box(
         modifier = modifier
             .shadow(5.dp, RoundedCornerShape(5.dp))
             .clip(RoundedCornerShape(5.dp))
             .background(MaterialTheme.colors.onBackground)
             .clickable {
+                keyboardController?.hide()
                 navController.navigate(
                     "dish_screen/${dataToJson(entry)}"
                 )

@@ -36,17 +36,16 @@ class DishViewModel @Inject constructor(
     var recipeInfo: Recipe? = null
     var loadError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
-    var isLoadingFav = mutableStateOf(false)
     val entity: Entity = jsonToData(savedStateHandle.get("entityString")!!, Entity::class.java) as Entity
     var isFav = mutableStateOf(false)
     init {
         isFavChecked()
+        loadRecipe()
         loadComments()
         loadWhereToEatPaginated()
-        loadRecipe()
     }
 
-    fun loadComments() {
+    private fun loadComments() {
         viewModelScope.launch {
             isLoading.value = true
             when(val result = repository.getCommentsList(entity.id!!)) {
@@ -64,7 +63,7 @@ class DishViewModel @Inject constructor(
             }
         }
     }
-    fun loadWhereToEatPaginated() {
+    private fun loadWhereToEatPaginated() {
         viewModelScope.launch {
             isLoading.value = true
             when(val result = repository.getWhereToEat(entity.id!!, curPage, curPage+5)) {
@@ -105,7 +104,7 @@ class DishViewModel @Inject constructor(
         }
     }
 
-    fun loadRecipe() {
+    private fun loadRecipe() {
         viewModelScope.launch {
             val result = repository.getRecipe(entity.id!!)
 
@@ -122,6 +121,7 @@ class DishViewModel @Inject constructor(
             }
         }
     }
+
     private fun isFavChecked(){
         var temp: Boolean
         CoroutineScope(Dispatchers.IO).launch {
@@ -157,10 +157,8 @@ class DishViewModel @Inject constructor(
     }
 
     fun openRestaurantMap(context: Context, address: String) {
-
         val linkas = Uri.parse("https://www.google.com/maps/search/?api=1&query=" + Uri.encode(address))
         val intent = Intent(Intent.ACTION_VIEW, linkas)
-//        intent.setPackage("com.google.android.apps.maps")
         startActivity(context, intent, null)
     }
 }

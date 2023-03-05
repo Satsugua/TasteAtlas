@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.example.tasteatlas.Constants.IMAGE_URL
 import com.example.tasteatlas.components.LoadingPopUp
 import com.example.tasteatlas.feature_entity_info.presentation.dish.components.ItemComments
 import com.example.tasteatlas.feature_entity_info.presentation.dish.components.ItemRecipe
@@ -78,7 +79,7 @@ fun DishScreen(
                         onCheckedChange = { checked = it }
                     ) {
                         if (checked) {
-                            Icon(Icons.Filled.Favorite, contentDescription = "it is favorite", tint = Color.Red, modifier = Modifier.size(48.dp))
+                            Icon(Icons.Filled.Favorite, contentDescription = "it is favorite", tint = MaterialTheme.colors.primary, modifier = Modifier.size(48.dp))
                             viewModel.addToFav()
                         } else {
                             Icon(Icons.Outlined.Favorite, contentDescription = "it is not favorite", modifier = Modifier.size(48.dp))

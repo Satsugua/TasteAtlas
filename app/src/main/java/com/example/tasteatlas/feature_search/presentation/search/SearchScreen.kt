@@ -79,9 +79,10 @@ fun SearchScreen(
             )
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
-        drawerBackgroundColor = MaterialTheme.colors.onSurface,
+        drawerBackgroundColor = Color(0xFFFFFFFF),
         drawerContent = {
             DrawerHeader()
+            Divider(modifier = Modifier.shadow(5.dp), color = Color(0xFFD5D2D2), thickness = 1.dp)
             DrawerBody(
                 items = listOf(
                     MenuItem(

@@ -18,23 +18,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 @Composable
-fun DrawerHeader(
-
-) {
+fun DrawerHeader() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 28.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Hello", style = TextStyle(fontSize = 24.sp, color = MaterialTheme.colors.primary))
+        Text(text = "Bon Appétit", style = TextStyle(fontSize = 24.sp, color = Color.Black))
     }
 }
 @Composable
 fun DrawerBody(
     items: List<MenuItem>,
     modifier: Modifier = Modifier,
-    itemTextStyle: TextStyle = TextStyle(fontSize = 18.sp, color = MaterialTheme.colors.primary),
+    itemTextStyle: TextStyle = TextStyle(fontSize = 18.sp, color = Color.Black),
     onItemClick: (MenuItem) -> Unit
 ) {
     LazyColumn(

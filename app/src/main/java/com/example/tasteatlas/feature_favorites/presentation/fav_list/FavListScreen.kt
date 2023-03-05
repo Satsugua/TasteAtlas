@@ -1,9 +1,7 @@
 package com.example.tasteatlas.feature_favorites.presentation.fav_list
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -67,9 +65,13 @@ fun FavListScreen(
                     viewModel.onEvent(FavEvents.Order(it))
                 })
             }
-            LazyColumn(modifier = Modifier
+            Spacer(modifier = Modifier.height(8.dp))
+            LazyColumn(
+                modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)) {
+                .padding(16.dp)
+            ) {
+
                 items(state.favs) { fav ->
                     SearchItemEntry(entry = fav, navController = navController)
                 }
