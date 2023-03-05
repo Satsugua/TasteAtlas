@@ -1,6 +1,8 @@
 # TasteAtlas
 
-WIP android app based on [TasteAtlas.com](https://www.tasteatlas.com/) website. It lets user to find dishes from across the world, shows recipes, restaurants where to try them out and comments.
+WIP android app based on [TasteAtlas.com](https://www.tasteatlas.com/) website.
+
+The app allows users to find recipes of all sorts of global dishes and shows restaurants where one can try these dishes, including ratings and comments.
 
 For learning purposes.
 
